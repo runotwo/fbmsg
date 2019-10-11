@@ -60,11 +60,9 @@ class FacebookClient:
             raise ValueError("Unknown message type")
         return
 
-    def send_message(self, recipient_id: int, message: Message):
+    def send_message(self, recipient_id: str, message: Message):
         if not isinstance(message, Message):
             raise TypeError('message must be an instance of Message')
-        if not isinstance(recipient_id, int):
-            raise TypeError('recipient_id must be an instance of int')
         resp = self.post_request('messages',
                                  json.dumps({'message': message.to_dict(), 'recipient': {'id': recipient_id}}))
         return resp

@@ -1,3 +1,5 @@
+import requests
+
 class Types:
     TEXT_MESSAGE = 1
     POSTBACK_MESSAGE = 2
@@ -42,7 +44,7 @@ class Referral(object):
 
 class Message(object):
     def __init__(self, sender: dict, recipient: dict, timestamp: int, message: dict = None, postback: dict = None,
-                 referral: dict = None, *args, **kwargs):
+                 referral: dict = None, attachments: list = None, *args, **kwargs):
         if not isinstance(sender, dict):
             raise TypeError('sender must be an instance of dict')
         if not isinstance(recipient, dict):
@@ -50,6 +52,7 @@ class Message(object):
         if not isinstance(timestamp, int):
             raise TypeError('timestamp must be an instance of int')
         self.type = Types.TEXT_MESSAGE
+        self.attachment = None
         if referral:
             if not isinstance(referral, dict):
                 raise TypeError('referral must be an instance of dict')
@@ -72,6 +75,11 @@ class Message(object):
             self.text = postback.get('title')
             self.payload = postback.get('payload')
             self.referral = postback.get('referral')
+        if attachments:
+            for att in attachments:
+                if att['type'] == 'image':
+                    self.attachment = requests.get(att['payload']['url'])
+                    break
         self.sender_id = sender['id']
         self.recipient_id = recipient['id']
         self.timestamp = timestamp

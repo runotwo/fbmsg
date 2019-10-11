@@ -8,7 +8,7 @@ from .models.settings import Analytics
 
 
 class FacebookClient:
-    def __init__(self, page_token: str = None, timeout=5, version=2.6):
+    def __init__(self, page_token: str = None, timeout=5, version=3.2):
         if not isinstance(page_token, str):
             raise TypeError("page_token must be an instance of str")
         self.page_token = page_token
